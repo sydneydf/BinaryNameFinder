@@ -7,12 +7,12 @@ class Csv_Reader:
     def __init__(self):
         pass
 
-    def read_file(self):
+    def read_file(self, _fileName):
         # Open CSV List
 
         player_list = []
 
-        with open("chess-players.csv", "r") as csv_file:
+        with open(_fileName, "r", encoding="utf8") as csv_file:
             # Init a csv Module reader object passing the csv_file into the object
             reader = csv.reader(csv_file)
             # Skip 1 line (Header)
@@ -37,16 +37,18 @@ class Csv_Reader:
 
                 if _born == "?":
                     _bornID = 0
-                elif _born.contains("<"):
+                elif "<" in _born:
                     _bornID = _born.replace("<", "")
                     _bornID = int(_bornID)  # Can we do both statements on same line or will that break?
+                else:
+                    _bornID = _born
 
                 deathID = None
                 if _died is None:
                     deathID = 0
                 elif _died == "?":
                     deathID = -1
-                elif _died.contains(">"):
+                elif ">" in _died:
                     deathID = _died.replace(">", "")
                     deathID = int(deathID)  # Can we do both statements on same line or will that break?
                 else:
@@ -54,3 +56,5 @@ class Csv_Reader:
 
                 newPlayer = Player(_lastName, _firstName, _fullName, _countries, _bornID, deathID)
                 player_list.append(newPlayer)
+
+        return player_list
